@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 
 from app.api.api_v1 import api_router
 from app.core.config import settings
@@ -23,6 +23,6 @@ async def global_exception_handler(_request: Request, exc: Exception) -> JSONRes
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-@app.get("/")
-async def root() -> dict[str, str]:
-    return {"message": "Welcome to FastAPI AI Base API"}
+@app.get("/", include_in_schema=False)
+async def root() -> RedirectResponse:
+    return RedirectResponse(url="/docs")
