@@ -109,6 +109,7 @@ docker run -p 8000:8000 fastapi-ai-base
 The project includes a GitHub Actions workflow (`.github/workflows/ci-cd.yml`) that:
 1. Runs linting (`ruff`), type checking (`mypy`), and tests (`pytest`) on every push to `master` and pull requests.
 2. Builds and pushes a Docker image to GitHub Container Registry (GHCR) when a push to `master` is successful.
+3. Provides a manual workflow for Trivy vulnerability scanning on the Docker image.
 
 ---
 
