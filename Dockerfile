@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:python3.14-bookworm-slim AS builder
+FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # ------------------------------------------------------------------------------
 # Runtime stage
 # ------------------------------------------------------------------------------
-FROM python:3.14-rc-slim-bookworm AS runtime
+FROM python:3.14-rc-slim-trixie AS runtime
 
 # Set the working directory
 WORKDIR /app
