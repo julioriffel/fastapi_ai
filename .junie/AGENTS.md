@@ -913,3 +913,68 @@ Before submitting the task, ensure:
 - **Dependency Overrides**: Use `app.dependency_overrides` to mock databases or external services during integration tests.
 - **TestClient**: Use `fastapi.testclient.TestClient` or `httpx.AsyncClient` for end-to-end API testing.
 - **Pydantic Validation**: Write tests to verify that invalid data is correctly rejected with a `422 Unprocessable Entity` status.
+
+---
+
+# Code Review Orientation
+
+This document outlines the mandatory code review process for all agents to ensure code quality, maintainability, and security before final submission.
+
+## Core Review Principles
+
+1. **Security First**: Scan for sensitive data, insecure serialization (pickle), and authentication gaps.
+2. **Performance Aware**: Check for N+1 queries, blocking I/O in async functions, and efficient database indexing.
+3. **Consistency**: Ensure code follows established patterns (RORO, Repository pattern, Dependency Injection).
+4. **Reliability**: Verify error handling, retries with backoff, and idempotent task design.
+5. **Maintainability**: Review naming clarity, function length, and adherence to "Dry" principles without over-engineering.
+
+---
+
+## Detailed Review Checklist
+
+### 1. Functional Correctness
+- [ ] Does the code satisfy all requirements in the Issue Description?
+- [ ] Are edge cases handled (empty inputs, null values, timeouts)?
+- [ ] Are there any logical errors or "off-by-one" bugs?
+- [ ] For bugs: Does the fix directly address the root cause demonstrated by the reproduction test?
+
+### 2. FastAPI & Python Standards
+- [ ] **Async/Await**: Are I/O operations (DB, API calls) properly awaited? No blocking calls in `async def`.
+- [ ] **Type Hinting**: Are all function signatures and variables properly typed?
+- [ ] **Pydantic**: Are models used for input/output validation? Is `BaseModel` used consistently?
+- [ ] **Dependency Injection**: Are FastAPI dependencies used for shared logic (auth, DB sessions)?
+- [ ] **Status Codes**: Are appropriate HTTP status codes returned (e.g., 201 for created, 204 for no content)?
+
+### 3. Database & SQLAlchemy 2.0
+- [ ] **Async Session**: Is the database session handled via async context managers or dependencies?
+- [ ] **Eager Loading**: Are relationships loaded efficiently to prevent N+1 issues (`selectinload`, `joinedload`)?
+- [ ] **Migrations**: Is there a corresponding Alembic migration for any schema changes?
+- [ ] **Transactions**: Are operations atomic? Is there proper rollback on failure?
+
+### 4. Celery & Distributed Tasks
+- [ ] **Idempotency**: Is the task safe to run multiple times?
+- [ ] **Serialization**: Is `json` used? (Verify `pickle` is NOT used).
+- [ ] **Retries**: Does the task implement `retry_backoff=True` with reasonable limits?
+- [ ] **Timeouts**: Are both `time_limit` and `soft_time_limit` defined?
+- [ ] **Result Storage**: Is `ignore_result=True` used where appropriate?
+
+### 5. Testing & Quality Assurance
+- [ ] **TDD Compliance**: Was the Red-Green-Refactor cycle followed?
+- [ ] **Coverage**: Do tests cover the happy path and critical failure modes?
+- [ ] **Mocks**: Are external services properly mocked in unit tests?
+- [ ] **Cleanliness**: Are there any `print()` statements, commented-out code, or TODOs left behind?
+
+### 6. Security & Infrastructure
+- [ ] **Secrets**: No hardcoded API keys, passwords, or tokens.
+- [ ] **Validation**: Is all user input validated before processing?
+- [ ] **Auth**: Are endpoints protected with appropriate security dependencies?
+- [ ] **Logging**: Are critical events logged with enough context (correlation IDs)? No sensitive data in logs.
+
+---
+
+## The Review Process
+
+1. **Self-Review**: Run through this checklist yourself before declaring a task "done".
+2. **Lint & Type Check**: Execute `ruff` and `mypy` to catch automated issues.
+3. **Test Execution**: Run the full suite: `pytest`.
+4. **Documentation**: Update OpenAPI tags, descriptions, and any relevant README sections.
