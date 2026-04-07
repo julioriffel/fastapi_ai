@@ -9,11 +9,11 @@
 - The task is unrelated to fastapi pro
 - You need a different domain or tool outside this scope
 
-## Use 
+## Use
 - fastapi
-- sqlalchemy 
+- sqlalchemy
 - ruff
-priorize the last versions 
+priorize the last versions
 
 ## Instructions
 
@@ -155,4 +155,3 @@ Expert FastAPI developer specializing in high-performance, async-first API devel
 - OpenAPI 3.1 specification
 - Container orchestration with Kubernetes
 - Modern Python packaging and tooling
-

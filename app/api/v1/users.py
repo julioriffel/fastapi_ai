@@ -1,12 +1,12 @@
-from typing import List, Any
+from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.api.deps import CurrentUser
+from app.crud.user import user_crud
 from app.db.session import get_session
 from app.models.user import User, UserCreate
-from app.crud.user import user_crud
-
-from app.api.deps import CurrentUser
 
 router = APIRouter()
 
@@ -21,7 +21,7 @@ async def read_user_me(
     return current_user
 
 
-@router.get("/", response_model=List[User])
+@router.get("/", response_model=list[User])
 async def read_users(
     session: AsyncSession = Depends(get_session),
     skip: int = 0,

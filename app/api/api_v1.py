@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1 import health, users, login
+from app.api.v1 import health, login, users
 
 api_router = APIRouter()
 api_router.include_router(login.router, tags=["login"])

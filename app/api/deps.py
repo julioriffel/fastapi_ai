@@ -1,4 +1,5 @@
 from typing import Annotated
+
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -7,9 +8,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core import security
 from app.core.config import settings
+from app.crud.user import user_crud
 from app.db.session import get_session
 from app.models.user import User
-from app.crud.user import user_crud
 from app.schemas.token import TokenPayload
 
 reusable_oauth2 = OAuth2PasswordBearer(
@@ -30,6 +31,11 @@ async def get_current_user(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
+    if token_data.sub is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
     user = await user_crud.get_by_id(session, id=token_data.sub)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -41,7 +47,9 @@ async def get_current_user(
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
-def get_current_active_superuser(current_user: CurrentUser) -> User:
+def get_current_active_superuser(
+    current_user: User = Depends(get_current_user),
+) -> User:
     if not current_user.is_superuser:
         raise HTTPException(
             status_code=403, detail="The user doesn't have enough privileges"

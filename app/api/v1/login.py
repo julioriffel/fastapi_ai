@@ -1,13 +1,14 @@
 from datetime import timedelta
 from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.api import deps
 from app.core import security
 from app.core.config import settings
 from app.crud.user import user_crud
+from app.db.session import get_session
 from app.schemas.token import Token
 
 router = APIRouter()
@@ -15,7 +16,7 @@ router = APIRouter()
 
 @router.post("/login/access-token", response_model=Token)
 async def login_access_token(
-    session: AsyncSession = Depends(deps.get_session),
+    session: AsyncSession = Depends(get_session),
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> Any:
     """
