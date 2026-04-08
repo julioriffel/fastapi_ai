@@ -80,3 +80,4 @@ cython_debug/
 test_main.http
 *.db
 .output.txt
+logs/

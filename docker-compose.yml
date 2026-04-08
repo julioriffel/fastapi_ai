@@ -24,7 +24,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - app_logs:/app/logs
+      - logs_data:/app/logs
     environment:
       - POSTGRES_SERVER=db
       - POSTGRES_USER=postgres
@@ -43,4 +43,4 @@ services:
 
 volumes:
   postgres_data:
-  app_logs:
+  logs_data:

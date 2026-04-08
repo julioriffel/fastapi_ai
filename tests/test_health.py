@@ -27,6 +27,11 @@ async def test_health_check_failure(client: AsyncClient) -> None:
     app.dependency_overrides[get_session] = override_get_session
 
     try:
+        from sqlalchemy import exc
+
+        mock_session.exec.side_effect = exc.SQLAlchemyError(
+            "Database connection failed"
+        )
         response = await client.get("/api/v1/health/")
         assert response.status_code == 503
         assert response.json() == {"status": "error", "database": "down"}

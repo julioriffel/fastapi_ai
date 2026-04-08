@@ -17,9 +17,22 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int = 5432
     DB_ECHO: bool = False
     DATABASE_URL: str | None = None
-    LOG_PATH: str = "logs/app.log"
+    LOG_PATH: str = ""
     LOG_RETENTION: str = "10 days"
     LOG_ROTATION: str = "10 MB"
+
+    @model_validator(mode="before")
+    @classmethod
+    def assemble_log_path(cls, data: dict[str, Any]) -> dict[str, Any]:
+        if data.get("LOG_PATH"):
+            return data
+
+        import socket
+
+        # Use hostname (container ID in Docker) as identifier
+        identifier = socket.gethostname()
+        data["LOG_PATH"] = f"logs/app_{identifier}.log"
+        return data
 
     @model_validator(mode="before")
     @classmethod

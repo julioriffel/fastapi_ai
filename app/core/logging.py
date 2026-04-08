@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 from types import FrameType
 
@@ -17,6 +18,12 @@ def setup_logging() -> None:
         format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
         level="INFO",
     )
+
+    # Ensure log directory exists
+    if settings.LOG_PATH:
+        log_dir = os.path.dirname(settings.LOG_PATH)
+        if log_dir:
+            os.makedirs(log_dir, exist_ok=True)
 
     # Add file handler with rotation, retention, and compression
     logger.add(
