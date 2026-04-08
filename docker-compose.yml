@@ -41,6 +41,17 @@ services:
       retries: 3
       start_period: 10s
 
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: log_viewer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8888:8080"
+    environment:
+      - DOZZLE_LEVEL=info
+
 volumes:
   postgres_data:
   logs_data:
