@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -23,7 +23,7 @@ async def read_user_me(
 
 @router.get("/", response_model=list[User])
 async def read_users(
-    session: AsyncSession = Depends(get_session),
+    session: Annotated[AsyncSession, Depends(get_session)],
     skip: int = 0,
     limit: int = 100,
 ) -> Any:
@@ -36,7 +36,7 @@ async def read_users(
 @router.post("/", response_model=User, status_code=status.HTTP_201_CREATED)
 async def create_user(
     *,
-    session: AsyncSession = Depends(get_session),
+    session: Annotated[AsyncSession, Depends(get_session)],
     user_in: UserCreate,
 ) -> Any:
     """

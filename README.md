@@ -110,6 +110,7 @@ The project includes a GitHub Actions workflow (`.github/workflows/ci-cd.yml`) t
 1. Runs linting (`ruff`), type checking (`mypy`), and tests (`pytest`) on every push to `master` and pull requests.
 2. Builds and pushes a Docker image to GitHub Container Registry (GHCR) when a push to `master` is successful.
 3. Automated dependency updates via GitHub Dependabot, with auto-merge for passing PRs.
+    - **Note:** For the auto-approve functionality to work, you may need to enable "Allow GitHub Actions to create and approve pull requests" in your repository settings (Settings > Actions > General > Workflow permissions) or provide a Personal Access Token (PAT) named `DEPENDABOT_PAT` with `repo` and `workflow` scopes.
 4. Provides a manual workflow for Trivy vulnerability scanning on the Docker image.
 
 ---

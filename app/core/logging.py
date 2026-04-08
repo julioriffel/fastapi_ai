@@ -4,6 +4,8 @@ from types import FrameType
 
 from loguru import logger
 
+from app.core.config import settings
+
 
 def setup_logging() -> None:
     # Remove default handlers
@@ -13,6 +15,16 @@ def setup_logging() -> None:
     logger.add(
         sys.stdout,
         format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
+        level="INFO",
+    )
+
+    # Add file handler with rotation, retention, and compression
+    logger.add(
+        settings.LOG_PATH,
+        rotation=settings.LOG_ROTATION,
+        retention=settings.LOG_RETENTION,
+        compression="zip",
+        serialize=True,  # Serialize logs as JSON
         level="INFO",
     )
 

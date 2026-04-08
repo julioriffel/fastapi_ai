@@ -30,6 +30,9 @@ COPY . .
 # Make start.sh executable
 RUN chmod +x start.sh
 
+# Create logs directory
+RUN mkdir -p logs
+
 # Expose the port
 EXPOSE 8000
 

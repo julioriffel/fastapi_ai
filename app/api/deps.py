@@ -19,7 +19,8 @@ reusable_oauth2 = OAuth2PasswordBearer(
 
 
 async def get_current_user(
-    session: AsyncSession = Depends(get_session), token: str = Depends(reusable_oauth2)
+    session: Annotated[AsyncSession, Depends(get_session)],
+    token: Annotated[str, Depends(reusable_oauth2)],
 ) -> User:
     try:
         payload = jwt.decode(

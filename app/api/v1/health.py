@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, Response, status
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -9,7 +11,7 @@ router = APIRouter()
 
 @router.get("/")
 async def health_check(
-    response: Response, session: AsyncSession = Depends(get_session)
+    response: Response, session: Annotated[AsyncSession, Depends(get_session)]
 ) -> dict[str, str]:
     try:
         await session.exec(select(1))
