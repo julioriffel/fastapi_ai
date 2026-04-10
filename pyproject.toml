@@ -15,7 +15,7 @@ dependencies = [
     "pytest-cov>=7.1.0",
     "passlib[bcrypt]>=1.7.4",
     "pyjwt>=2.12.1",
-    "python-multipart>=0.0.24",
+    "python-multipart>=0.0.26",
     "aiosqlite>=0.22.1",
     "loguru>=0.7.3",
 ]
